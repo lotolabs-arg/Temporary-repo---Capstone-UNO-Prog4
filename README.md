@@ -81,53 +81,62 @@ http://localhost:3000
 ## 📂 Project Structure
 
 ```
-Backend
-│ package.json
-│ package-lock.json
-│ postman_collection.json
-│ README.md
-│ .env
-│
-└───src
-│ app.js
-│ server.js
-│
-├───game
-│ ├───domain
-│ │ ├───entities
-│ │ │ Game.js
-│ │ └───ports
-│ │ GameRepositoryPort.js
-│ │
-│ ├───application
-│ │ └───usecases
-│ │ createGame.js
-│ │ getGameById.js
-│ │ updateGame.js
-│ │ patchGame.js
-│ │ deleteGame.js
-│ │
-│ └───infrastructure
-│ ├───adapters
-│ │ ├───controllers
-│ │ │ GameController.js
-│ │ └───repositories
-│ │ SequelizeGameRepository.js
-│ ├───models
-│ │ GameModel.js
-│ └───routes
-│ gameRoutes.js
-│
-└───shared
-├───domain
-│ └───errors
-│ AppErrors.js
-│
-└───infrastructure
-├───database
-│ sequelizeConfig.js
-└───middlewares
-errorHandler.js
+C:.
+│   Capstone - UNO.iml
+│   README.md
+│       
+└───Backend
+    │   .env
+    │   docker-compose.yml
+    │   package-lock.json
+    │   package.json
+    │   postman_collection.json  
+    │   
+    └───src
+        │   app.js
+        │   server.js
+        │   
+        ├───game
+        │   ├───application
+        │   │   └───usecases
+        │   │           createGame.js
+        │   │           deleteGame.js
+        │   │           getGameById.js
+        │   │           patchGame.js
+        │   │           updateGame.js
+        │   │           
+        │   ├───domain
+        │   │   ├───entities
+        │   │   │       Game.js
+        │   │   │       
+        │   │   └───ports
+        │   │           GameRepositoryPort.js
+        │   │           
+        │   └───infrastructure
+        │       ├───adapters
+        │       │   ├───controllers
+        │       │   │       GameController.js
+        │       │   │       
+        │       │   └───repositories
+        │       │           SequelizeGameRepository.js
+        │       │           
+        │       ├───models
+        │       │       GameModel.js
+        │       │       
+        │       └───routes
+        │               gameRoutes.js
+        │               
+        └───shared
+            ├───domain
+            │   └───errors
+            │           AppErrors.js
+            │           
+            └───infrastructure
+                ├───database
+                │       sequelizeConfig.js
+                │       
+                └───middlewares
+                        errorHandler.js
 ```
 
 ---
@@ -288,9 +297,25 @@ understand the responsibility of each module simply by looking at the directory 
 
 ---
 
-## 🧑‍💻 Notes on Project Evolution
+## 📖 Notes on Project Evolution
 
 This README reflects the **Week 2** state of the Capstone: domain definition and initial CRUD for the base entity,
 following a three-layer architecture as required by the course's base document. Subsequent weeks will progressively
 introduce UNO-specific entities (players, cards, game sessions, score history), core game logic, unit tests with minimum
 70% coverage, SOLID-driven refactors, advanced rule validation, and a final Desktop UI integrated with this backend.
+
+---
+
+## 🧑‍💻 Authors
+
+Project developed at **Jala University | [Oficial - ES] - Programación 2 - CSPR-124**  
+by: <br>
+
+- Toloza Leonel Alejandro (Cohort 5 T1/2025 - Arg.) <br>
+  Student ID: STU-953.ARG-C5 <br>
+  Institutional Email: Leonel.Toloza0125@jala.university
+
+Instructors:
+
+- Professor: Santiago Komadina Geffroy (Group A)
+- Practitioner: Orlando Alarcon Perez (Section C)
