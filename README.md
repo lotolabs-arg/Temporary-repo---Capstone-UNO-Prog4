@@ -308,7 +308,7 @@ introduce UNO-specific entities (players, cards, game sessions, score history), 
 
 ## 🧑‍💻 Authors
 
-Project developed at **Jala University | [Oficial - ES] - Programación 2 - CSPR-124**  
+Project developed at **Jala University | [Official - ES] - Programming 4 - CSPR-244**
 by: <br>
 
 - Toloza Leonel Alejandro (Cohort 5 T1/2025 - Arg.) <br>
