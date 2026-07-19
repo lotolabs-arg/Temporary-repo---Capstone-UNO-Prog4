@@ -1,0 +1,129 @@
+{
+  "info": {
+    "name": "Game API - Capstone Week 2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Game",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"My Game\",\n  \"description\": \"An exciting game\",\n  \"genre\": \"Adventure\",\n  \"platform\": \"PC\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/game",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "game"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Game By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/game/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "game",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Update Game (PUT)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Updated Game\",\n  \"description\": \"An updated and exciting game\",\n  \"genre\": \"Racing\",\n  \"platform\": \"Mobile\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/game/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "game",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Patch Game",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"An updated game\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/game/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "game",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete Game",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/game/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "game",
+            "1"
+          ]
+        }
+      }
+    }
+  ]
+}
