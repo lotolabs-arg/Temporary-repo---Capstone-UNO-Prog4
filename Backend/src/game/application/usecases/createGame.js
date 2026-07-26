@@ -3,10 +3,9 @@ const {ValidationError} = require("../../../shared/domain/errors/AppErrors");
 
 /**
  * @typedef {Object} CreateGameInput
- * @property {string} name
- * @property {string} description
- * @property {string} genre
- * @property {string} platform
+ * @property {string} title
+ * @property {string} [status]
+ * @property {number} maxPlayers
  */
 
 /**
@@ -21,16 +20,19 @@ function createCreateGameUseCase(gameRepository) {
      * @returns {Promise<import("../../domain/entities/Game").GameEntity>} Created Game entity.
      */
     return async function createGameUseCase(inputData) {
-        const name = inputData.name;
-        const description = inputData.description;
-        const genre = inputData.genre;
-        const platform = inputData.platform;
+        const title = inputData.title;
+        const status = inputData.status !== undefined ? inputData.status : "active";
+        const maxPlayers = inputData.maxPlayers;
 
-        if (name === undefined || name === null || name === "") {
-            throw new ValidationError("Field 'name' is required");
+        if (title === undefined || title === null || title === "") {
+            throw new ValidationError("Field 'title' is required");
         }
 
-        const newGame = createGame(null, name, description, genre, platform);
+        if (maxPlayers === undefined || maxPlayers === null || Number.isInteger(maxPlayers) === false) {
+            throw new ValidationError("Field 'maxPlayers' is required and must be an integer");
+        }
+
+        const newGame = createGame(null, title, status, maxPlayers);
         const savedGame = await gameRepository.create(newGame);
         return savedGame;
     };

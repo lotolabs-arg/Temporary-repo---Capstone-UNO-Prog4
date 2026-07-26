@@ -3,10 +3,9 @@ const {NotFoundError} = require("../../../shared/domain/errors/AppErrors");
 
 /**
  * @typedef {Object} UpdateGameInput
- * @property {string} name
- * @property {string} description
- * @property {string} genre
- * @property {string} platform
+ * @property {string} title
+ * @property {string} status
+ * @property {number} maxPlayers
  */
 
 /**
@@ -24,10 +23,9 @@ function createUpdateGameUseCase(gameRepository) {
     return async function updateGameUseCase(id, inputData) {
         const replacementGame = createGame(
             id,
-            inputData.name,
-            inputData.description,
-            inputData.genre,
-            inputData.platform
+            inputData.title,
+            inputData.status,
+            inputData.maxPlayers
         );
 
         const updatedGame = await gameRepository.update(id, replacementGame);

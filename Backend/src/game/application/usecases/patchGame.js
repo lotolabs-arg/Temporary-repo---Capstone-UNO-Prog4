@@ -2,10 +2,9 @@ const {NotFoundError} = require("../../../shared/domain/errors/AppErrors");
 
 /**
  * @typedef {Object} PatchGameInput
- * @property {string} [name]
- * @property {string} [description]
- * @property {string} [genre]
- * @property {string} [platform]
+ * @property {string} [title]
+ * @property {string} [status]
+ * @property {number} [maxPlayers]
  */
 
 /**
