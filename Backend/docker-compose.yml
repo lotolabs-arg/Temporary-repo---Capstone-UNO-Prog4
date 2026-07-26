@@ -1,0 +1,19 @@
+## docker compose down -v && docker compose up
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:14-alpine
+    container_name: capstone_uno_db
+    restart: always
+    environment:
+      POSTGRES_DB: capstone_uno_game_db
+      POSTGRES_USER: UNO-Capstone
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
