@@ -9,17 +9,18 @@ const {ValidationError} = require("../../../../shared/domain/errors/AppErrors");
  * @property {Function} deleteGameUseCase
  */
 
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 /**
- * Parses and validates a route parameter as an integer identifier.
+ * Validates a route parameter as a UUID identifier.
  * @param {string} rawId - Raw identifier extracted from the request path.
- * @returns {number} Parsed integer identifier.
+ * @returns {string} The validated UUID identifier.
  */
 function parseGameId(rawId) {
-    const parsedId = parseInt(rawId, 10);
-    if (Number.isNaN(parsedId)) {
-        throw new ValidationError("Field 'id' must be a valid integer");
+    if (typeof rawId !== "string" || UUID_PATTERN.test(rawId) === false) {
+        throw new ValidationError("Field 'id' must be a valid UUID");
     }
-    return parsedId;
+    return rawId;
 }
 
 /**

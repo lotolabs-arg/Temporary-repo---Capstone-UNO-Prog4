@@ -8,11 +8,11 @@ const express = require("express");
 function createGameRoutes(gameController) {
     var router = express.Router();
 
-    router.post("/game", gameController.handleCreateGame);
-    router.get("/game/:id", gameController.handleGetGameById);
-    router.put("/game/:id", gameController.handleUpdateGame);
-    router.patch("/game/:id", gameController.handlePatchGame);
-    router.delete("/game/:id", gameController.handleDeleteGame);
+    router.post("/api/games", gameController.handleCreateGame);
+    router.get("/api/games/:id", gameController.handleGetGameById);
+    router.put("/api/games/:id", gameController.handleUpdateGame);
+    router.patch("/api/games/:id", gameController.handlePatchGame);
+    router.delete("/api/games/:id", gameController.handleDeleteGame);
 
     return router;
 }
