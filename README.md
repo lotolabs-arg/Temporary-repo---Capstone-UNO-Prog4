@@ -1,13 +1,13 @@
 # 🃏 UNO Backend API
 
-Functional-first Node.js backend for a digital implementation of the **UNO** card game, developed as the incremental
-Capstone Project (Week 2 stage) for the course. The system applies **Functional Programming** principles (pure
-functions, immutability, isolated side effects) on top of a strict **Hexagonal Architecture (Ports and Adapters)** with
+Functional-first Node.js backend for a digital implementation of the **UNO** card game, developed as an incremental
+Capstone Project for the course. The system applies **Functional Programming** principles (pure functions,
+immutability, isolated side effects) on top of a strict **Hexagonal Architecture (Ports and Adapters)** with
 **Screaming Architecture** folder conventions.
 
-At this stage of the Capstone, the project delivers the foundational domain entity and its full CRUD lifecycle, along
-with the layered architecture that every subsequent weekly delivery (game logic, players, cards, scores, turns) will be
-built on top of, per the official Capstone base document.
+The project currently exposes full CRUD management for **Games**, built on top of a layered architecture designed to
+scale as UNO-specific concepts (players, cards, game sessions, score history, turn logic) are progressively
+incorporated.
 
 ---
 
@@ -143,16 +143,15 @@ C:.
 
 ## 🔑 Endpoints (Game Entity)
 
-### `POST /game` — Create a new game
+### `POST /api/games` — Create a new game
 
 **Request body:**
 
 ```json
 {
-  "name": "My Game",
-  "description": "An exciting game",
-  "genre": "Adventure",
-  "platform": "PC"
+  "title": "UNO",
+  "status": "active",
+  "maxPlayers": 4
 }
 ```
 
@@ -160,27 +159,29 @@ C:.
 
 ```json
 {
-  "id": 1,
-  "name": "My Game",
-  "description": "An exciting game",
-  "genre": "Adventure",
-  "platform": "PC"
+  "id": "8c9a6e2e-3f7b-4e34-9a4d-0c2f9d9d1a11",
+  "title": "UNO",
+  "status": "active",
+  "maxPlayers": 4,
+  "createdAt": "2026-07-25T21:00:00.000Z",
+  "updatedAt": "2026-07-25T21:00:00.000Z"
 }
 ```
 
 ---
 
-### `GET /game/:id` — Retrieve a game by id
+### `GET /api/games/:id` — Retrieve a game by id
 
 **Response `200 OK`:**
 
 ```json
 {
-  "id": 1,
-  "name": "My Game",
-  "description": "An exciting game",
-  "genre": "Adventure",
-  "platform": "PC"
+  "id": "8c9a6e2e-3f7b-4e34-9a4d-0c2f9d9d1a11",
+  "title": "UNO",
+  "status": "active",
+  "maxPlayers": 4,
+  "createdAt": "2026-07-25T21:00:00.000Z",
+  "updatedAt": "2026-07-25T21:00:00.000Z"
 }
 ```
 
@@ -194,16 +195,15 @@ C:.
 
 ---
 
-### `PUT /game/:id` — Fully replace a game
+### `PUT /api/games/:id` — Fully replace a game
 
 **Request body:**
 
 ```json
 {
-  "name": "Updated Game",
-  "description": "An updated and exciting game",
-  "genre": "Racing",
-  "platform": "Mobile"
+  "title": "UNO Reloaded",
+  "status": "waiting",
+  "maxPlayers": 6
 }
 ```
 
@@ -211,23 +211,24 @@ C:.
 
 ```json
 {
-  "id": 1,
-  "name": "Updated Game",
-  "description": "An updated and exciting game",
-  "genre": "Racing",
-  "platform": "Mobile"
+  "id": "8c9a6e2e-3f7b-4e34-9a4d-0c2f9d9d1a11",
+  "title": "UNO Reloaded",
+  "status": "waiting",
+  "maxPlayers": 6,
+  "createdAt": "2026-07-25T21:00:00.000Z",
+  "updatedAt": "2026-07-25T21:05:00.000Z"
 }
 ```
 
 ---
 
-### `PATCH /game/:id` — Partially update a game
+### `PATCH /api/games/:id` — Partially update a game
 
 **Request body:**
 
 ```json
 {
-  "description": "An updated game"
+  "status": "finished"
 }
 ```
 
@@ -235,17 +236,18 @@ C:.
 
 ```json
 {
-  "id": 1,
-  "name": "Updated Game",
-  "description": "An updated game",
-  "genre": "Adventure",
-  "platform": "PC"
+  "id": "8c9a6e2e-3f7b-4e34-9a4d-0c2f9d9d1a11",
+  "title": "UNO Reloaded",
+  "status": "finished",
+  "maxPlayers": 6,
+  "createdAt": "2026-07-25T21:00:00.000Z",
+  "updatedAt": "2026-07-25T21:10:00.000Z"
 }
 ```
 
 ---
 
-### `DELETE /game/:id` — Delete a game
+### `DELETE /api/games/:id` — Delete a game
 
 **Response:** `204 No Content` (no response body)
 
@@ -256,8 +258,8 @@ C:.
 The API centralizes error translation through a global Express middleware (`errorHandler.js`), which never inspects
 mutated native `Error` objects. Instead, the application layer throws typed domain errors defined in `AppErrors.js`:
 
-- **`ValidationError`** → HTTP `400 Bad Request` (invalid or missing input, such as a missing `name` or a non-numeric
-  `id`).
+- **`ValidationError`** → HTTP `400 Bad Request` (invalid or missing input, such as a missing `title`, a missing or
+  non-integer `maxPlayers`, or an `id` that is not a valid UUID).
 - **`NotFoundError`** → HTTP `404 Not Found` (requested `Game` does not exist).
 
 Any unrecognized error defaults to HTTP `500 Internal Server Error`, keeping the response contract predictable across
@@ -299,10 +301,10 @@ understand the responsibility of each module simply by looking at the directory 
 
 ## 📖 Notes on Project Evolution
 
-This README reflects the **Week 2** state of the Capstone: domain definition and initial CRUD for the base entity,
-following a three-layer architecture as required by the course's base document. Subsequent weeks will progressively
-introduce UNO-specific entities (players, cards, game sessions, score history), core game logic, unit tests with minimum
-70% coverage, SOLID-driven refactors, advanced rule validation, and a final Desktop UI integrated with this backend.
+`Game` currently identifies each match by a UUID and tracks its `title`, `status` and `maxPlayers`, with `createdAt` /
+`updatedAt` timestamps managed automatically by Sequelize. Player, card and score management, along with the actual UNO
+game logic, turn handling, unit tests with minimum 70% coverage, SOLID-driven refactors, and a final Desktop UI, will
+be incorporated on top of this same architecture as the project keeps growing.
 
 ---
 
