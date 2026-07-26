@@ -10,30 +10,27 @@ function defineGameModel(sequelizeInstance) {
         "Game",
         {
             id: {
-                type: DataTypes.INTEGER,
-                primaryKey: true,
-                autoIncrement: true
+                type: DataTypes.UUID,
+                defaultValue: DataTypes.UUIDV4,
+                primaryKey: true
             },
-            name: {
+            title: {
                 type: DataTypes.STRING,
                 allowNull: false
             },
-            description: {
+            status: {
                 type: DataTypes.STRING,
-                allowNull: true
+                allowNull: false,
+                defaultValue: "active"
             },
-            genre: {
-                type: DataTypes.STRING,
-                allowNull: true
-            },
-            platform: {
-                type: DataTypes.STRING,
-                allowNull: true
+            maxPlayers: {
+                type: DataTypes.INTEGER,
+                allowNull: false
             }
         },
         {
             tableName: "games",
-            timestamps: false
+            timestamps: true
         }
     );
 

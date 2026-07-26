@@ -21,23 +21,16 @@ class SequelizeGameRepository extends GameRepositoryPort {
      */
     async create(game) {
         const createdRecord = await this.gameModel.create({
-            name: game.name,
-            description: game.description,
-            genre: game.genre,
-            platform: game.platform
+            title: game.title,
+            status: game.status,
+            maxPlayers: game.maxPlayers
         });
 
-        return createGame(
-            createdRecord.id,
-            createdRecord.name,
-            createdRecord.description,
-            createdRecord.genre,
-            createdRecord.platform
-        );
+        return this.#toEntity(createdRecord);
     }
 
     /**
-     * @param {number|string} id
+     * @param {string} id
      * @returns {Promise<import("../../../domain/entities/Game").GameEntity|null>}
      */
     async findById(id) {
@@ -46,17 +39,11 @@ class SequelizeGameRepository extends GameRepositoryPort {
             return null;
         }
 
-        return createGame(
-            foundRecord.id,
-            foundRecord.name,
-            foundRecord.description,
-            foundRecord.genre,
-            foundRecord.platform
-        );
+        return this.#toEntity(foundRecord);
     }
 
     /**
-     * @param {number|string} id
+     * @param {string} id
      * @param {import("../../../domain/entities/Game").GameEntity} game
      * @returns {Promise<import("../../../domain/entities/Game").GameEntity|null>}
      */
@@ -66,23 +53,16 @@ class SequelizeGameRepository extends GameRepositoryPort {
             return null;
         }
 
-        foundRecord.name = game.name;
-        foundRecord.description = game.description;
-        foundRecord.genre = game.genre;
-        foundRecord.platform = game.platform;
+        foundRecord.title = game.title;
+        foundRecord.status = game.status;
+        foundRecord.maxPlayers = game.maxPlayers;
         await foundRecord.save();
 
-        return createGame(
-            foundRecord.id,
-            foundRecord.name,
-            foundRecord.description,
-            foundRecord.genre,
-            foundRecord.platform
-        );
+        return this.#toEntity(foundRecord);
     }
 
     /**
-     * @param {number|string} id
+     * @param {string} id
      * @param {Object} partialData
      * @returns {Promise<import("../../../domain/entities/Game").GameEntity|null>}
      */
@@ -92,31 +72,22 @@ class SequelizeGameRepository extends GameRepositoryPort {
             return null;
         }
 
-        if (partialData.name !== undefined) {
-            foundRecord.name = partialData.name;
+        if (partialData.title !== undefined) {
+            foundRecord.title = partialData.title;
         }
-        if (partialData.description !== undefined) {
-            foundRecord.description = partialData.description;
+        if (partialData.status !== undefined) {
+            foundRecord.status = partialData.status;
         }
-        if (partialData.genre !== undefined) {
-            foundRecord.genre = partialData.genre;
-        }
-        if (partialData.platform !== undefined) {
-            foundRecord.platform = partialData.platform;
+        if (partialData.maxPlayers !== undefined) {
+            foundRecord.maxPlayers = partialData.maxPlayers;
         }
         await foundRecord.save();
 
-        return createGame(
-            foundRecord.id,
-            foundRecord.name,
-            foundRecord.description,
-            foundRecord.genre,
-            foundRecord.platform
-        );
+        return this.#toEntity(foundRecord);
     }
 
     /**
-     * @param {number|string} id
+     * @param {string} id
      * @returns {Promise<boolean>}
      */
     async delete(id) {
@@ -127,6 +98,22 @@ class SequelizeGameRepository extends GameRepositoryPort {
 
         await foundRecord.destroy();
         return true;
+    }
+
+    /**
+     * Maps a Sequelize Game record into a domain GameEntity.
+     * @param {Object} record - Sequelize model instance.
+     * @returns {import("../../../domain/entities/Game").GameEntity}
+     */
+    #toEntity(record) {
+        return createGame(
+            record.id,
+            record.title,
+            record.status,
+            record.maxPlayers,
+            record.createdAt,
+            record.updatedAt
+        );
     }
 }
 
