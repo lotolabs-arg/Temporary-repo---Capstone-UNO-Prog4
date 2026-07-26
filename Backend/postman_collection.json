@@ -1,129 +1,295 @@
 {
   "info": {
-    "name": "Game API - Capstone Week 2",
+    "name": "UNO Capstone API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "gameId",
+      "value": ""
+    }
+  ],
   "item": [
     {
-      "name": "Create Game",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
+      "name": "Game",
+      "item": [
+        {
+          "name": "1. Create Game",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 201 Created', function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const responseBody = pm.response.json();",
+                  "",
+                  "pm.test('Response contains a valid UUID id', function () {",
+                  "    pm.expect(responseBody.id).to.be.a('string');",
+                  "    pm.expect(responseBody.id).to.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);",
+                  "});",
+                  "",
+                  "pm.test('Response matches the request payload', function () {",
+                  "    pm.expect(responseBody.title).to.eql('UNO');",
+                  "    pm.expect(responseBody.status).to.eql('active');",
+                  "    pm.expect(responseBody.maxPlayers).to.eql(4);",
+                  "});",
+                  "",
+                  "pm.test('Response includes createdAt and updatedAt timestamps', function () {",
+                  "    pm.expect(responseBody.createdAt).to.be.a('string');",
+                  "    pm.expect(responseBody.updatedAt).to.be.a('string');",
+                  "});",
+                  "",
+                  "pm.collectionVariables.set('gameId', responseBody.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"UNO\",\n  \"status\": \"active\",\n  \"maxPlayers\": 4\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/games",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "games"
+              ]
+            }
           }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"My Game\",\n  \"description\": \"An exciting game\",\n  \"genre\": \"Adventure\",\n  \"platform\": \"PC\"\n}"
         },
-        "url": {
-          "raw": "http://localhost:3000/game",
-          "protocol": "http",
-          "host": [
-            "localhost"
+        {
+          "name": "2. Get Game By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const responseBody = pm.response.json();",
+                  "",
+                  "pm.test('Returned game matches the created one', function () {",
+                  "    pm.expect(responseBody.id).to.eql(pm.collectionVariables.get('gameId'));",
+                  "    pm.expect(responseBody.title).to.eql('UNO');",
+                  "    pm.expect(responseBody.status).to.eql('active');",
+                  "    pm.expect(responseBody.maxPlayers).to.eql(4);",
+                  "});"
+                ]
+              }
+            }
           ],
-          "port": "3000",
-          "path": [
-            "game"
-          ]
-        }
-      }
-    },
-    {
-      "name": "Get Game By Id",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3000/game/1",
-          "protocol": "http",
-          "host": [
-            "localhost"
-          ],
-          "port": "3000",
-          "path": [
-            "game",
-            "1"
-          ]
-        }
-      }
-    },
-    {
-      "name": "Update Game (PUT)",
-      "request": {
-        "method": "PUT",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/games/{{gameId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "games",
+                "{{gameId}}"
+              ]
+            }
           }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"name\": \"Updated Game\",\n  \"description\": \"An updated and exciting game\",\n  \"genre\": \"Racing\",\n  \"platform\": \"Mobile\"\n}"
         },
-        "url": {
-          "raw": "http://localhost:3000/game/1",
-          "protocol": "http",
-          "host": [
-            "localhost"
+        {
+          "name": "3. Update Game (PUT)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const responseBody = pm.response.json();",
+                  "",
+                  "pm.test('Game was fully replaced with the new values', function () {",
+                  "    pm.expect(responseBody.id).to.eql(pm.collectionVariables.get('gameId'));",
+                  "    pm.expect(responseBody.title).to.eql('UNO Reloaded');",
+                  "    pm.expect(responseBody.status).to.eql('waiting');",
+                  "    pm.expect(responseBody.maxPlayers).to.eql(6);",
+                  "});",
+                  "",
+                  "pm.test('updatedAt changed after the update', function () {",
+                  "    pm.expect(responseBody.updatedAt).to.not.eql(responseBody.createdAt);",
+                  "});"
+                ]
+              }
+            }
           ],
-          "port": "3000",
-          "path": [
-            "game",
-            "1"
-          ]
-        }
-      }
-    },
-    {
-      "name": "Patch Game",
-      "request": {
-        "method": "PATCH",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"UNO Reloaded\",\n  \"status\": \"waiting\",\n  \"maxPlayers\": 6\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/games/{{gameId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "games",
+                "{{gameId}}"
+              ]
+            }
           }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"description\": \"An updated game\"\n}"
         },
-        "url": {
-          "raw": "http://localhost:3000/game/1",
-          "protocol": "http",
-          "host": [
-            "localhost"
+        {
+          "name": "4. Patch Game",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200 OK', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "const responseBody = pm.response.json();",
+                  "",
+                  "pm.test('Only status changed, other fields untouched', function () {",
+                  "    pm.expect(responseBody.id).to.eql(pm.collectionVariables.get('gameId'));",
+                  "    pm.expect(responseBody.status).to.eql('finished');",
+                  "    pm.expect(responseBody.title).to.eql('UNO Reloaded');",
+                  "    pm.expect(responseBody.maxPlayers).to.eql(6);",
+                  "});"
+                ]
+              }
+            }
           ],
-          "port": "3000",
-          "path": [
-            "game",
-            "1"
-          ]
-        }
-      }
-    },
-    {
-      "name": "Delete Game",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:3000/game/1",
-          "protocol": "http",
-          "host": [
-            "localhost"
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"finished\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/games/{{gameId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "games",
+                "{{gameId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5. Delete Game",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 204 No Content', function () {",
+                  "    pm.response.to.have.status(204);",
+                  "});",
+                  "",
+                  "pm.test('Response body is empty', function () {",
+                  "    pm.expect(pm.response.text()).to.have.lengthOf(0);",
+                  "});"
+                ]
+              }
+            }
           ],
-          "port": "3000",
-          "path": [
-            "game",
-            "1"
-          ]
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/games/{{gameId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "games",
+                "{{gameId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "6. Get Game By Id (after delete, expect 404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 404 Not Found after deletion', function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});",
+                  "",
+                  "pm.test('Response contains an error message', function () {",
+                  "    const responseBody = pm.response.json();",
+                  "    pm.expect(responseBody.error).to.eql('Game not found');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/games/{{gameId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "games",
+                "{{gameId}}"
+              ]
+            }
+          }
         }
-      }
+      ]
     }
   ]
 }
